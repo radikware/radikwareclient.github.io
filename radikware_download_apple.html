@@ -1,0 +1,155 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  @keyframes lavaFlow {
+    0%   { background-position: 0% 0%; }
+    25%  { background-position: 100% 20%; }
+    50%  { background-position: 60% 100%; }
+    75%  { background-position: 0% 80%; }
+    100% { background-position: 0% 0%; }
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 18px 2px #8b000044, 0 4px 16px #0008; }
+    50%       { box-shadow: 0 0 38px 10px #c0000055, 0 4px 16px #000b; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .page {
+    width: 100%;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      160deg,
+      #5a0000 0%, #8b0000 15%, #6b0000 30%,
+      #3a0000 50%, #1a0000 70%, #0a0000 85%, #000000 100%
+    );
+    background-size: 300% 300%;
+    animation: lavaFlow 8s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, #9b000055 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 60%, #cc000033 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 90%, #6b000044 0%, transparent 55%);
+    animation: lavaFlow 12s ease-in-out infinite reverse;
+    pointer-events: none;
+  }
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 0.9s cubic-bezier(.22,.8,.36,1) both;
+  }
+  .eyebrow {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,180,180,0.55);
+  }
+  .title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-size: 56px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: rgba(0,0,0,0.88);
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .subtitle {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: rgba(255,200,200,0.38);
+    margin-top: 2px;
+  }
+  .dl-btn {
+    margin-top: 40px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: rgba(255,230,230,0.92);
+    background: rgba(120,0,0,0.72);
+    border: 1px solid rgba(200,60,60,0.35);
+    border-radius: 980px;
+    padding: 13px 40px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.12s;
+    animation: pulseGlow 3.5s ease-in-out infinite;
+  }
+  .dl-btn:hover {
+    background: rgba(155,0,0,0.85);
+    border-color: rgba(220,80,80,0.5);
+    color: #fff;
+    transform: scale(1.025);
+  }
+  .dl-btn:active, .dl-btn.clicked {
+    background: rgba(195,60,60,0.9);
+    border-color: rgba(240,120,120,0.6);
+    color: #fff;
+    transform: scale(0.97);
+    animation: none;
+    box-shadow: 0 0 28px 8px rgba(220,80,80,0.35);
+  }
+  .dl-btn i {
+    font-size: 17px;
+    opacity: 0.85;
+  }
+</style>
+
+<div class="page">
+  <div class="content">
+    <span class="eyebrow">Software</span>
+    <span class="title">radikware</span>
+    <span class="subtitle">Version 1.0 · Free Download</span>
+    <button class="dl-btn" id="dlBtn" onclick="handleDownload()">
+      <i class="ti ti-download" aria-hidden="true"></i>
+      Download
+    </button>
+  </div>
+</div>
+
+<script>
+function handleDownload() {
+  const btn = document.getElementById('dlBtn');
+  btn.classList.add('clicked');
+  btn.innerHTML = '<i class="ti ti-check" aria-hidden="true" style="font-size:17px;opacity:.85;"></i> Downloaded';
+
+  const blob = new Blob(['radikware\n\nФайл успешно скачан.'], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'radikware.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  setTimeout(() => {
+    btn.classList.remove('clicked');
+    btn.innerHTML = '<i class="ti ti-download" aria-hidden="true" style="font-size:17px;opacity:.85;"></i> Download';
+  }, 2000);
+}
+</script>
